@@ -1,0 +1,173 @@
+.card {
+    width: 500px;
+    height: 500px;
+    margin: 20px auto;
+    perspective: 800px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 15px;
+    /* slightly reduced */
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    border-radius: 14px;
+}
+
+.card.flipped,
+.card-inner.flipped {
+    transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+    /* reduced padding */
+    border-radius: 14px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.card-content {
+    overflow-y: visible;
+    padding-right: 10px;
+}
+
+.card-front {
+    background-color: #e6f7ff;
+    color: #005c80;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.card-front::after {
+    content: "";
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 14px solid #8b2525;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+}
+
+.card-front:hover::after {
+    opacity: 1;
+}
+
+.card-back {
+    background: linear-gradient(135deg, #a6e3ff, #d2f4ff);
+    transform: rotateY(180deg);
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow-y: auto;
+}
+
+.card-back::after {
+    content: "";
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 14px solid #8b2525;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+}
+
+.card-back:hover::after {
+    opacity: 1;
+}
+
+h2 {
+    font-size: 2em;
+    /* was ~50px, now ~35px */
+    text-align: center;
+    font-weight: bold;
+    margin-top: 0;
+}
+
+.project-info p {
+    font-size: 1em;
+    /* was 1.3em */
+    margin: 0.3em 0;
+}
+
+.project-section {
+    margin-top: 1em;
+    margin-bottom: 2em;
+}
+
+.project-section h3 {
+    font-size: 1.3em;
+    /* was 1.8em */
+    color: #0077b6;
+    font-weight: 600;
+    margin-bottom: 0.4em;
+}
+
+.project-section p {
+    font-size: 0.95em;
+    line-height: 1.4em;
+    color: #023e8a;
+    margin: 0;
+}
+
+hr {
+    border: none;
+    height: 2px;
+    background-color: black;
+    margin: 1.5em 0;
+}
+
+.card-logo {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+}
+
+.card-front .card-logo {
+    align-items: flex-end;
+    justify-content: flex-start;
+}
+
+.card-back .card-logo {
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.card-logo img {
+    max-width: 28%;
+    max-height: 28%;
+    opacity: 0.95;
+    border-radius: 12px;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    /* Or match your card background */
+    width: 540px;
+    height: 540px;
+    overflow: hidden;
+}

@@ -1,0 +1,81 @@
+---
+output:
+  html_document:
+    css: extra.css  # Optional if embedding style
+    number_sections: false
+    fig_caption: true
+params:
+  project_name: "Nom du projet"
+  date: "JJ/MM/AAAA"
+  location: "Lieu"
+  responsable: "Responsable(s)"
+  partenaire: "Partenaire(s)"
+  client: "Client(s)"
+  organisation: "Organisation"
+  description: "Texte de description du projet"
+  valorisation: "Rendu et publications liées au projet"
+---
+
+```{=html}
+<div class="card">
+  <div class="card-inner">
+
+    <div class="card-front">
+      <div class="card-content">
+        <h2> `r params$project_name`</h2>
+
+<br>
+        <hr />
+
+      <div class="project-info">
+        <p><strong>Date:</strong> `r params$date`</p>
+        <p><strong>Lieu:</strong> `r params$location`</p>
+        <p><strong>Responsable(s):</strong> `r params$responsable`</p>
+        <p><strong>Partenaire(s):</strong> `r params$partenaire`</p>
+        <p><strong>Client(s):</strong> `r params$client`</p>
+       </div>
+
+      </div>
+      
+      <div class="card-logo">
+  <img src="Images_et_Logo/Logo_Cohabys.png" alt="Project Logo" />
+</div>
+      
+    </div>
+
+    <div class="card-back">
+
+     <div class="project-section">
+          <h3>Description</h3>
+          <p>`r params$description`</p>
+        </div>
+
+<br>
+        <hr />
+<br>
+
+        <div class="project-section">
+          <h3>Publication</h3>
+          <p>`r params$valorisation`</p>
+        </div>
+
+        <div class="card-logo">
+  <img src="Images_et_Logo/Logo_Cohabys.png" alt="Project Logo" />
+</div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const cards = document.querySelectorAll(".card");
+  cards.forEach(card => {
+    card.addEventListener("click", function () {
+      card.querySelector(".card-inner").classList.toggle("flipped");
+    });
+  });
+});
+</script>
+```
