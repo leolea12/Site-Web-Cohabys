@@ -6,11 +6,18 @@ library(htmltools)
 library(leafpop)
 library(rnaturalearth)
 
+htmlDependency(
+  name = "leaflet-providers",
+  version = "1.9.0",
+  src = c(href = "https://unpkg.com/leaflet-providers"),
+  script = "leaflet-providers.js"
+)
+
 # Simulate your project data
 n <- 10
 dates <- sample(2021:2025, n, replace = TRUE)
 
-domaines <- c("Sismique", "Écologie", "Acoustique", "Courantométrie", "Bathy")
+domaines <- c("Sismique", "Écologie", "Acoustique", "Courantométrie", "Bathymétrie")
 services <- c(
   "Étude d'impact", "Relevé terrain", "Analyse acoustique",
   "Cartographie habitat", "Suivi espèces"
@@ -32,7 +39,7 @@ countries <- ne_countries(scale = "medium", returnclass = "sf")
 
 map <- leaflet(options = leafletOptions(minZoom = 3, maxZoom = 10)) %>%
   addTiles(group = "OSM (default)") %>%
-  addProviderTiles(provider = "Esri.OceanBasemap") %>%
+  addProviderTiles(provider = "Esri.WorldImagery") %>%
   addPolygons(
     data = countries,
     label = ~name,
@@ -66,7 +73,7 @@ popup_css <- tags$style(HTML("
     box-shadow: none !important;
   }
   .leaflet-popup-tip {
-    background: transparent !important;
+     display:none;
   }
   .leaflet-control-layers label {
     white-space: nowrap !important;
@@ -102,6 +109,21 @@ final_map <- map %>%
       var markerData = %s;
       var markers = [];
       var markerLayer = L.layerGroup().addTo(map);
+      let openPopup = null;
+
+      // Define tile layers
+      var defaultBasemap = L.tileLayer.provider('Esri.WorldImagery').addTo(map);
+      var imageryBasemap = L.tileLayer.provider('Esri.OceanBasemap');
+      var currentBasemap = defaultBasemap;
+
+      // Function to switch basemap
+      function switchBasemap(newBasemap) {
+        if (currentBasemap !== newBasemap) {
+          map.removeLayer(currentBasemap);
+          map.addLayer(newBasemap);
+          currentBasemap = newBasemap;
+        }
+      }
 
       // Define custom icon
       var customIcon = L.icon({
@@ -110,16 +132,83 @@ final_map <- map %>%
         iconAnchor: [20, 40]
       });
 
+
+
       markerData.forEach(function(d) {
-        var popup = `<iframe src='file:///C:/Users/lheinr02/Desktop/Cohabys/Projets/SiteWeb/Output/${d.html_files}' width='540' height='550' style='border:none;'></iframe>`;
-        var marker = L.marker([d.lat, d.lng], {icon: customIcon}).bindPopup(popup);
-        marker._meta = {
-          date: d.Dates,
-          domaine: d.Domaines,
-          service: d.Services
-        };
-        markerLayer.addLayer(marker);
-        markers.push(marker);
+  var popupContent = `<iframe src='file:///C:/Users/lheinr02/Desktop/Cohabys/Projets-Travail/Site web/Output/${d.html_files}' width='540' height='550' style='border:none;'></iframe>`;
+
+  var marker = L.marker([d.lat, d.lng], {icon: customIcon});
+
+  // create popup but don't bind to marker automatically
+  var popup = L.popup({
+  maxWidth: 560,
+}).setContent(popupContent);
+
+  marker._meta = {
+    date: d.Dates,
+    domaine: d.Domaines,
+    service: d.Services
+  };
+  markerLayer.addLayer(marker);
+
+marker.on('click', function(e) {
+  map.flyTo(e.latlng, 10, {
+    animate: true,
+    duration: 3,
+    easeLinearity: 0.9
+  });
+
+  // Close any open popup before starting a new one
+  if (openPopup) {
+    map.closePopup(openPopup);
+    openPopup = null;
+  }
+  // Open popup only after the animation delay
+    setTimeout(() => {
+    var offsetLatLng = L.latLng(e.latlng.lat - 0.25, e.latlng.lng + 0.55);
+    popup.setLatLng(offsetLatLng);
+    popup.openOn(map);
+    openPopup = popup;
+  }, 3000);
+
+  var domaine = this._meta.domaine;
+  if (['Sismique', 'Acoustique', 'Courantométrie', 'Bathymétrie', 'Écologie'].includes(domaine)) {
+    switchBasemap(imageryBasemap);
+  } else {
+    switchBasemap(defaultBasemap);
+  }
+});
+
+  markers.push(marker);
+});
+
+      // Restore default basemap when zooming out
+      map.on('zoomend', function() {
+        if (map.getZoom() < 5) {
+          switchBasemap(defaultBasemap)
+        }
+      })
+
+      map.on('zoomend', function() {
+        if (map.getZoom() < 10) {
+          if (openPopup) {
+            map.closePopup(openPopup)
+            openPopup = null
+          }
+        }
+      })
+
+      // Restore basemap when clicking outside markers/popups
+      map.on('click', function(e) {
+        // If no popup is open, revert to default basemap
+        if (!map._popup || !map._popup._isOpen) {
+          switchBasemap(defaultBasemap);
+        }
+      });
+
+      // Restore basemap when popup is closed
+      map.on('popupclose', function(e) {
+        switchBasemap(defaultBasemap);
       });
 
       // Create filtering UI
@@ -179,5 +268,15 @@ final_map <- map %>%
   ", marker_data))
 
 # Print the map
+
+final_map <- final_map %>%
+  htmltools::attachDependencies(
+    htmlDependency(
+      name = "leaflet-providers",
+      version = "1.9.0",
+      src = c(href = "https://unpkg.com/leaflet-providers"),
+      script = "leaflet-providers.js"
+    )
+  )
 
 saveWidget(final_map, file = "Output/Projects_map.html")
