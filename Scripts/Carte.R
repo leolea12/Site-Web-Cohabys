@@ -26,7 +26,7 @@ services <- c(
 coords <- data.frame(
   lat = runif(n, 43, 49),
   lng = runif(n, -5, 8),
-  html_files = sample(c("Fiche_projet_1.html", "Fiche_projet_2.html"), n, replace = TRUE),
+  html_files = sample(c("docs/Outputs/Fiche_projet_1.html", "docs/Outputs/Fiche_projet_2.html"), n, replace = TRUE),
   Dates = as.character(dates),
   Domaines = sample(domaines, n, replace = TRUE),
   Services = sample(services, n, replace = TRUE),
