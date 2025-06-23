@@ -135,7 +135,7 @@ final_map <- map %>%
 
 
       markerData.forEach(function(d) {
-  var popupContent = `<iframe src='file:///C:/Users/lheinr02/Desktop/Cohabys/Projets-Travail/Site web/Output/${d.html_files}' width='540' height='550' style='border:none;'></iframe>`;
+  var popupContent = `<iframe src='${d.html_files}' width='540' height='550' style='border:none;'></iframe>`;
 
   var marker = L.marker([d.lat, d.lng], {icon: customIcon});
 
@@ -279,4 +279,4 @@ final_map <- final_map %>%
     )
   )
 
-saveWidget(final_map, file = "Output/Projects_map.html")
+saveWidget(final_map, file = "Outputs/Projects_map.html", selfcontained = TRUE)
