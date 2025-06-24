@@ -57,7 +57,7 @@ map <- leaflet(options = leafletOptions(minZoom = 3, maxZoom = 10)) %>%
 Icones <- iconList(
   Dot = makeIcon(
     iconUrl = "icone_carte.png",
-    iconRetinaUrl = "Images_et_Logo/icone_carte.png",
+    iconRetinaUrl = "icone_carte.png",
     iconWidth = 40, iconHeight = 40,
     iconAnchorX = 20, iconAnchorY = 40
   )
@@ -279,4 +279,4 @@ final_map <- final_map %>%
     )
   )
 
-saveWidget(final_map, file = "Outputs/Projects_map.html", selfcontained = FALSE)
+saveWidget(final_map, file = "index.html", selfcontained = FALSE)

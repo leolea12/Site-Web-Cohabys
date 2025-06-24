@@ -1,4 +1,3 @@
-
 #### Chargement des packages ####
 
 library(tidyverse)
@@ -7,7 +6,7 @@ library(rmarkdown)
 
 #### Chargement du tableau des fiches projet ####
 
-Tab_proj <- tibble(janitor::clean_names(read_xlsx("Data/Tableau_Projets.xlsx")))[-3,] # Supression de la colonne masquée
+Tab_proj <- tibble(janitor::clean_names(read_xlsx("Tableau_Projets.xlsx")))[-3, ] # Supression de la colonne masquée
 
 #### Creation du dataframe des projets ####
 
@@ -22,14 +21,11 @@ projects_df <- data.frame(
 
 #### Fonction d'automatisation des fiches projet ####
 
-generate_project_sheets <- function(data, template = "Fiche_Projet.Rmd", output_dir = "Output") {
-    if (!dir.exists(output_dir)) dir.create(output_dir)
-
+generate_project_sheets <- function(data, template = "Fiche_Projet.Rmd") {
     for (i in 1:nrow(data)) {
         render(
             input = template,
             output_file = paste0(data$file_name[i], ".html"),
-            output_dir = output_dir,
             params = list(
                 project_name = data$project_name[i],
                 date = data$date[i],

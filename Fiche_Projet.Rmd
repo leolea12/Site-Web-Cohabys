@@ -38,7 +38,7 @@ params:
       </div>
       
       <div class="card-logo">
-  <img src="Images_et_Logo/Logo_Cohabys.png" alt="Project Logo" />
+  <img src="Logo_Cohabys.png" alt="Project Logo" />
 </div>
       
     </div>
@@ -60,7 +60,7 @@ params:
         </div>
 
         <div class="card-logo">
-  <img src="Images_et_Logo/Logo_Cohabys.png" alt="Project Logo" />
+  <img src="Logo_Cohabys.png" alt="Project Logo" />
 </div>
 
     </div>
