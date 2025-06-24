@@ -279,4 +279,4 @@ final_map <- final_map %>%
     )
   )
 
-saveWidget(final_map, file = "index.html", selfcontained = FALSE)
+saveWidget(final_map, file = "index.html", selfcontained = TRUE)
