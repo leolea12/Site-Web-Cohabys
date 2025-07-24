@@ -63,9 +63,9 @@ params:
 }), collapse = "<br>")`</p>
         </div>
 
-        <div class="card-logo">
+        <!-- <div class="card-logo">
   <img src="Logo_Cohabys.png" alt="Project Logo" />
-</div>
+</div> -->
 
     </div>
 
