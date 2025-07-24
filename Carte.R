@@ -16,17 +16,6 @@ htmlDependency(
 load("Tab_proj_formatted.RData")
 
 
-coords <- data.frame(
-  lat = runif(n, 43, 49),
-  lng = runif(n, -5, 8),
-  html_files = sample(c("Fiche_projet_1.html", "Fiche_projet_2.html"), n, replace = TRUE),
-  Dates = as.character(dates),
-  Domaines = sample(domaines, n, replace = TRUE),
-  Services = sample(services, n, replace = TRUE),
-  icones = rep("Dot", n),
-  stringsAsFactors = FALSE
-)
-
 coords <- Tab_proj %>%
   select(lng = longitude, lat = latitude, html_files = file_name, Dates = date_carte, Domaines = domaine, Services = service) %>%
   mutate(icones = rep("Dot", n()))
