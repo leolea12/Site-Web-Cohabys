@@ -22,7 +22,26 @@ Tab_proj <- janitor::clean_names(read_xlsx("Tableau_Projets.xlsx"))[-c(1:3), ] %
         client = clients_concernes,
         valorisation = livrables_et_valorisations
     ) %>%
-    select(-empl)
+    select(-empl) %>%
+    
+# COUPER ICI POUR GENERER LES FICHES PROJETS 
+
+    mutate(
+        date_clean = str_trim(date),
+        year_list = map(date_clean, function(x){
+            if(str_detect(x, "et")){
+                as.integer(str_extract_all(x,"\\d{4}")[[1]])
+            } else if (str_detect(x, "-")){
+                years <- as.integer(str_extract_all(x, "\\d{4}")[[1]])
+                seq(min(years), max(years))
+            } else {
+                as.integer(x)
+            }
+        })
+    ) %>% 
+    unnest(year_list) %>%
+     mutate(date_carte = as.character(year_list)) %>%
+         select(-date_clean, -year_list)
 
 save(Tab_proj, file = "Tab_proj_formatted.RData")
 

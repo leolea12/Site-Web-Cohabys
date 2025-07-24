@@ -28,7 +28,7 @@ coords <- data.frame(
 )
 
 coords <- Tab_proj %>%
-  select(lng = longitude, lat = latitude, html_files = file_name, Domaines = domaine, Services = service) %>%
+  select(lng = longitude, lat = latitude, html_files = file_name, Dates = date_carte, Domaines = domaine, Services = service) %>%
   mutate(icones = rep("Dot", n()))
 
 
