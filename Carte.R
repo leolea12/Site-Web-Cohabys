@@ -159,7 +159,7 @@ marker.on('click', function(e) {
   }, 3000);
 
   var domaine = this._meta.domaine;
-  if (['Sismique', 'Acoustique', 'Courantométrie', 'Bathymétrie', 'Écologie'].includes(domaine)) {
+  if (['Aménagements côtiers', 'Biodiversité', 'Campagne géophysique', 'Energies Marines Renouvelables', 'Exploitation ressources minières', 'Biodiversité ; exploitation de ressources minières'].includes(domaine)) {
     switchBasemap(imageryBasemap);
   } else {
     switchBasemap(defaultBasemap);
