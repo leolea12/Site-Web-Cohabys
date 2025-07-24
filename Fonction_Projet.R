@@ -3,20 +3,28 @@
 library(tidyverse)
 library(readxl)
 library(rmarkdown)
+library(sf)
 
 #### Chargement du tableau des fiches projet ####
 
-Tab_proj <- tibble(janitor::clean_names(read_xlsx("Tableau_Projets.xlsx")))[-3, ] # Supression de la colonne masquée
+Tab_proj <- janitor::clean_names(read_xlsx("Tableau_Projets.xlsx"))[-c(1:3), ] %>%
+    separate(col = "empl", into = c("latitude", "longitude"), sep = ";", remove = FALSE) %>%
+    mutate(
+        longitude = as.numeric(gsub(",", ".", gsub("[^0-9,.-]", "", longitude))),
+        latitude = as.numeric(gsub(",", ".", gsub("[^0-9,.-]", "", latitude)))
+    ) %>%
+    mutate(across(everything(), ~ ifelse(is.na(.), "", .))) %>%
+    mutate(file_name = paste0("Fiche_projet_", row_number())) %>%
+    rename(
+        project_name = titre_du_projet,
+        responsable = responsable_projet,
+        partenaire = partenaires,
+        client = clients_concernes,
+        valorisation = livrables_et_valorisations
+    ) %>%
+    select(-empl)
 
-#### Creation du dataframe des projets ####
-
-projects_df <- data.frame(
-    file_name = c("Fiche_projet_1", "Fiche_projet_2"), project_name = c("Projet A", "Projet B"),
-    date = c("01/01/2025", "15/06/2024"), location = c("Nice", "Guyane"), responsable = c("Alice", "Bob"),
-    partenaire = c("Partner 1", "Partner 2"), client = c("Client A", "Client B"), organisation = c("Org A", "Org B"),
-    description = c("1", "2"), valorisation = c("Valorisation 1", "Valorisation 2"),
-    stringsAsFactors = FALSE
-)
+save(Tab_proj, file = "Tab_proj_formatted.RData")
 
 
 #### Fonction d'automatisation des fiches projet ####
@@ -29,11 +37,9 @@ generate_project_sheets <- function(data, template = "Fiche_Projet.Rmd") {
             params = list(
                 project_name = data$project_name[i],
                 date = data$date[i],
-                location = data$location[i],
                 responsable = data$responsable[i],
                 partenaire = data$partenaire[i],
                 client = data$client[i],
-                organisation = data$organisation[i],
                 description = data$description[i],
                 valorisation = data$valorisation[i]
             ),
@@ -43,4 +49,4 @@ generate_project_sheets <- function(data, template = "Fiche_Projet.Rmd") {
 }
 
 
-generate_project_sheets(projects_df)
+generate_project_sheets(Tab_proj)

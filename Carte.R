@@ -13,15 +13,8 @@ htmlDependency(
   script = "leaflet-providers.js"
 )
 
-# Simulate your project data
-n <- 10
-dates <- sample(2021:2025, n, replace = TRUE)
+load("Tab_proj_formatted.RData")
 
-domaines <- c("Sismique", "Écologie", "Acoustique", "Courantométrie", "Bathymétrie")
-services <- c(
-  "Étude d'impact", "Relevé terrain", "Analyse acoustique",
-  "Cartographie habitat", "Suivi espèces"
-)
 
 coords <- data.frame(
   lat = runif(n, 43, 49),
@@ -33,6 +26,11 @@ coords <- data.frame(
   icones = rep("Dot", n),
   stringsAsFactors = FALSE
 )
+
+coords <- Tab_proj %>%
+  select(lng = longitude, lat = latitude, html_files = file_name, Domaines = domaine, Services = service) %>%
+  mutate(icones = rep("Dot", n()))
+
 
 # Create map base
 countries <- ne_countries(scale = "medium", returnclass = "sf")
@@ -58,7 +56,7 @@ Icones <- iconList(
   Dot = makeIcon(
     iconUrl = "icone_carte.png",
     iconRetinaUrl = "icone_carte.png",
-    iconWidth = 40, iconHeight = 40,
+    iconWidth = 20, iconHeight = 20,
     iconAnchorX = 20, iconAnchorY = 40
   )
 )
