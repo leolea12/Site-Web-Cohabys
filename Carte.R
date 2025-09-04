@@ -15,7 +15,6 @@ htmlDependency(
 
 load("Tab_proj_formatted.RData")
 
-
 coords <- Tab_proj %>%
   select(lng = longitude, lat = latitude, html_files = file_name, Dates = date_carte, Domaines = domaine, Services = service) %>%
   mutate(icones = rep("Dot", n()))
@@ -158,13 +157,13 @@ marker.on('click', function(e) {
     openPopup = popup;
   }, 3000);
 
-#   var domaine = this._meta.domaine;
-#   if (['Aménagements côtiers', 'Biodiversité', 'Campagnes géophysiques', 'Energies Marines Renouvelables', 'Exploitation ressources minières'].includes(domaine)) {
-#     switchBasemap(imageryBasemap);
-#   } else {
-#     switchBasemap(defaultBasemap);
-#   }
-# });
+  var domaine = this._meta.domaine;
+  if (['Aménagements côtiers', 'Biodiversité', 'Campagnes géophysiques', 'Energies Marines Renouvelables', 'Exploitation ressources minières'].includes(domaine)) {
+    switchBasemap(imageryBasemap);
+  } else {
+    switchBasemap(defaultBasemap);
+  }
+});
 
   markers.push(marker);
 });
