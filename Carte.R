@@ -158,13 +158,13 @@ marker.on('click', function(e) {
     openPopup = popup;
   }, 3000);
 
-  var domaine = this._meta.domaine;
-  if (['Aménagements côtiers', 'Biodiversité', 'Campagne géophysique', 'Energies Marines Renouvelables', 'Exploitation ressources minières', 'Biodiversité ; exploitation de ressources minières'].includes(domaine)) {
-    switchBasemap(imageryBasemap);
-  } else {
-    switchBasemap(defaultBasemap);
-  }
-});
+#   var domaine = this._meta.domaine;
+#   if (['Aménagements côtiers', 'Biodiversité', 'Campagnes géophysiques', 'Energies Marines Renouvelables', 'Exploitation ressources minières'].includes(domaine)) {
+#     switchBasemap(imageryBasemap);
+#   } else {
+#     switchBasemap(defaultBasemap);
+#   }
+# });
 
   markers.push(marker);
 });

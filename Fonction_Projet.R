@@ -23,30 +23,47 @@ Tab_proj <- janitor::clean_names(read_xlsx("Tableau_Projets.xlsx"))[-c(1:3), ] %
         valorisation = livrables_et_valorisations
     ) %>%
     select(-empl) %>%
-    
-# COUPER ICI POUR GENERER LES FICHES PROJETS 
+    # COUPER ICI POUR GENERER LES FICHES PROJETS, CONSERVER ET SAUVEGARDER POUR LE SCRIPT QUI GENERE LA CARTE
 
     mutate(
         date_clean = str_trim(date),
-        year_list = map(date_clean, function(x){
-            if(str_detect(x, "et")){
-                as.integer(str_extract_all(x,"\\d{4}")[[1]])
-            } else if (str_detect(x, "-")){
+        year_list = map(date_clean, function(x) {
+            if (str_detect(x, "et")) {
+                as.integer(str_extract_all(x, "\\d{4}")[[1]])
+            } else if (str_detect(x, "-")) {
                 years <- as.integer(str_extract_all(x, "\\d{4}")[[1]])
                 seq(min(years), max(years))
             } else {
                 as.integer(x)
             }
         })
-    ) %>% 
+    ) %>%
     unnest(year_list) %>%
-     mutate(date_carte = as.character(year_list)) %>%
-         select(-date_clean, -year_list)
+    mutate(date_carte = as.character(year_list)) %>%
+    select(-date_clean, -year_list) %>%
+    mutate(
+        date_clean = str_trim(date),
+        year_list = map(date_clean, function(x) {
+            if (str_detect(x, "et")) {
+                as.integer(str_extract_all(x, "\\d{4}")[[1]])
+            } else if (str_detect(x, "-")) {
+                years <- as.integer(str_extract_all(x, "\\d{4}")[[1]])
+                seq(min(years), max(years))
+            } else {
+                as.integer(x)
+            }
+        })
+    ) %>%
+    unnest(year_list) %>%
+    mutate(date_carte = as.character(year_list)) %>%
+    select(-date_clean, -year_list) %>%
+    separate_rows(domaine, sep = "\\s*(;|,)\\s*") %>%
+    separate_rows(service, sep = "\\s*(;|,)\\s*")
 
 save(Tab_proj, file = "Tab_proj_formatted.RData")
 
 
-#### Fonction d'automatisation des fiches projet ####
+#### Fonction d'automatisation des fiches projet a réaliser avec la partie au dessus de la mention  COUPER ICI POUR GENERER LES FICHES PROJETS, CONSERVER ET SAUVEGARDER POUR LE SCRIPT QUI GENERE LA CARTE ####
 
 generate_project_sheets <- function(data, template = "Fiche_Projet.Rmd") {
     for (i in 1:nrow(data)) {
