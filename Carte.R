@@ -1,6 +1,7 @@
 rm(list = ls())
 
 library(leaflet)
+library(tidyverse)
 library(htmlwidgets)
 library(htmltools)
 library(leafpop)
